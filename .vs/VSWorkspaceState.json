@@ -1,0 +1,38 @@
+{
+  "DevContainersInfoBarHidden": true,
+  "OutputFoldersPerTargetSystem": {
+    "Локальный компьютер": [
+      "out\\build\\x64-debug",
+      "out\\install\\x64-debug",
+      "out\\build\\x64-release",
+      "out\\install\\x64-release",
+      "out\\build\\x86-debug",
+      "out\\install\\x86-debug",
+      "out\\build\\x86-release",
+      "out\\install\\x86-release"
+    ],
+    "WSL: Ubuntu": [
+      "out\\Ubuntu\\build\\linux-debug",
+      "out\\Ubuntu\\install\\linux-debug"
+    ]
+  },
+  "ActiveTargetSystem": "Локальный компьютер",
+  "MRUPresetsPerTargetSystem": {
+    "Локальный компьютер": {
+      "configure": "x64-debug"
+    },
+    "WSL: Ubuntu": {
+      "configure": "linux-debug"
+    }
+  },
+  "ExpandedNodes": [
+    "",
+    "\\out",
+    "\\out\\build",
+    "\\out\\build\\x64\\Debug",
+    "\\out\\build\\x64\\Debug\\ZERO_CHECK",
+    "\\out\\build\\x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog"
+  ],
+  "SelectedNode": "\\test.txt",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,56 @@
+#pragma once
+
+enum class TokenType {
+	IDENTIFIER_VAR,
+	IDENTIFIER_ARREY,
+	IDENTIFIER_FUNC,
+
+	// Операторы
+	PLUS,
+	MINUS,
+	MULTIPLY,
+	DIVIDE,
+	ASSIGN,
+	REMAINDER,
+	EQUAL,
+	NOT_EQUAL,
+	LESS_THAN,
+	LESS_THAN_OR_EQUAL,
+	GREATER_THAN,
+	GREATER_THAN_OR_EQUAL,
+
+	// Специальные символы
+	SEMICOLON,
+	COMMA,
+	LEFT_PAREN,
+	RIGHT_PAREN,
+	LEFT_BRACE,
+	RIGHT_BRACE,
+
+	// Ключевые слова
+	IF,
+	ELSE,
+	WHILE,
+	FOR,
+	LOOP,
+	RETURN,
+	FUNCTION,
+	VAR,
+	ARREY,
+
+	// Типы данных
+	INT,
+	FLOAT,
+	HEX,
+	BINARY,
+	BOOL,
+	CHAR,
+	NONE,
+	// Логические значения
+	TRUE,
+	FALSE,
+
+	INVALIDE_TYPE,
+	END_OF_LINE,
+	END_OF_FILE
+};
