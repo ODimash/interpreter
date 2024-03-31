@@ -4,5 +4,6 @@
 *.lib
 
 .vs/
+.vscode/
 out/
 build/
