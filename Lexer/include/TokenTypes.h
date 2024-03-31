@@ -19,6 +19,10 @@ enum class TokenType {
 	GREATER_THAN,
 	GREATER_THAN_OR_EQUAL,
 
+	AND,
+	OR,
+	NOT,
+
 	// Специальные символы
 	SEMICOLON,
 	COMMA,
@@ -34,9 +38,9 @@ enum class TokenType {
 	FOR,
 	LOOP,
 	RETURN,
-	FUNCTION,
+	FUNC,
 	VAR,
-	ARREY,
+	ARRAY,
 
 	// Типы данных
 	INT,
@@ -45,12 +49,17 @@ enum class TokenType {
 	BINARY,
 	BOOL,
 	CHAR,
+	STRING,
 	NONE,
 	// Логические значения
 	TRUE,
 	FALSE,
 
+	MSGBOX,
+	INPUTBOX,
+
 	INVALIDE_TYPE,
 	END_OF_LINE,
+	COMMENT,
 	END_OF_FILE
 };

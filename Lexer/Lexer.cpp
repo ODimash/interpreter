@@ -56,15 +56,16 @@ Token Lexer::scanToken() {
 	case '{': advance(); return { TokenType::LEFT_BRACE, "" };
 	case '}': advance(); return { TokenType::RIGHT_BRACE, "" };
 	case ';': advance(); return { TokenType::SEMICOLON, "" };
-	case '=':
+	case '=': advance(); return { TokenType::EQUAL, "" };
+	case ',': advance(); return { TokenType::COMMA, "" };
+	case '#': advance(); return tokenizeComment();
+	case '\"': advance(); return tokenizeString();
+	case ':': 
 		if (peek(1) == '=') {
-			advance(2); 
-			return { TokenType::EQUAL, "" };
-		} else {
-			advance();
-			return { TokenType::ASSIGN, "" };
+			advance(2);
+			return {TokenType::ASSIGN, ""};
 		}
-
+		break;
 	case '<':
 		if (peek(1) == '=') {
 			advance(2);
@@ -88,8 +89,9 @@ Token Lexer::scanToken() {
 		break;
 	}
 
+	std::string invalide_type_info = "\"" + std::string(1, c) + "\": [" + std::to_string(currentPosition) + ']';
 	advance();
-	return { TokenType::INVALIDE_TYPE, "" };
+	return { TokenType::INVALIDE_TYPE, invalide_type_info};
 }
 
 Token Lexer::scanWord() {
@@ -122,8 +124,15 @@ Token Lexer::tokenizeWord(std::string& word) {
 	if (word == "return")  return { TokenType::RETURN, "" };
 	if (word == "true")    return { TokenType::TRUE, "" };
 	if (word == "false")   return { TokenType::FALSE, "" };
-	if (word == "None")    return { TokenType::NONE, "" };
-	else                   return { TokenType::IDENTIFIER_VAR, word };
+	if (word == "and")     return { TokenType::AND, "" };
+	if (word == "or")      return { TokenType::OR, "" };
+	if (word == "not")     return { TokenType::NOT, ""};
+	if (word == "none")    return { TokenType::NONE, "" };
+	if (word == "var")     return { TokenType::VAR, "" };
+	if (word == "func")    return { TokenType::FUNC, "" };
+	if (word == "msgBox")  return { TokenType::MSGBOX, "" };
+	if (word == "inputBox") return { TokenType::MSGBOX, "" };
+	else                    return tokenizeIdentifier(word);
 
 
 }
@@ -168,4 +177,37 @@ Token Lexer::tokenizeBinaryNumber() {
 		currentChar = advance();
 	}
 	return { TokenType::BINARY, number };
+}
+
+
+Token Lexer::tokenizeComment() {
+	std::string comment;
+	char currentChar = peek(0);
+	while (currentChar != '\n') {
+		comment += currentChar;
+		currentChar = advance();
+	}
+	return { TokenType::COMMENT, comment };
+}
+
+Token Lexer::tokenizeIdentifier(std::string& word) {
+	char currentChar = peek(0);
+	while (isspace(currentChar)) {
+		currentChar = advance();
+	};
+	if (peek(0) == '(') {
+		return { TokenType::IDENTIFIER_FUNC, word };
+	} 
+	return { TokenType::IDENTIFIER_VAR, word };
+}
+
+Token Lexer::tokenizeString() {
+	std::string str;
+	char currentChar = peek(0);
+	while (currentChar != '\"') {
+		str += currentChar;
+		currentChar = advance();
+	}
+	advance();
+	return { TokenType::STRING, str };
 }

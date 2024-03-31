@@ -30,6 +30,9 @@ private:
 	Token tokenizeDecNumber();
 	Token tokenizeHexNumber();
 	Token tokenizeBinaryNumber();
+	Token tokenizeComment();
+	Token tokenizeIdentifier(std::string& word);
+	Token tokenizeString();
 
 	bool isAtEnd();
 	bool isHexNumber(char c);

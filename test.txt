@@ -1,11 +1,32 @@
-1+2+3.3+0x1ab-43*awds+(1.3-0b1101);
-var test = 1.2 + 2.4..1 * 0b1242.dew;
-lopp a {
-	if b+a {
-		0x32 + 0b12;
-		32 + 12.3;
-	}
-	else if a {
-
-	}	
+# Определение функции
+func Greet() {
+    msgBox("Hello, world!")
 }
+
+# Вызов функции
+Greet()
+
+# Цикл для вывода чисел от 1 до 5
+loop(5) {
+    msgBox(i)
+}
+
+# Условная конструкция
+if (i > 3) {
+    msgBox("i is greater than 3")
+} else if (i = 3) {
+    msgBox("i is less than or equal to 3")
+}
+
+# Присваивание переменной
+var x := 10
+
+inputBox(x, "Загаловок", "Подсказка")
+
+# Вывод значения переменной
+msgBox(x, "Загаловок")
+
+# Неправильные коды
+var 1var := 1
+var var2 := 1.2.2
+var := $121
