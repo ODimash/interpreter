@@ -1,0 +1,128 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.25"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "Interpreter",
+					"jsonFile" : "directory-Interpreter-Debug-b56e6110ed68f2192239.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.25"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Interpreter",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "Lexer",
+					"jsonFile" : "directory-Lexer-Debug-55bd0b8b43520827c223.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.25"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "Lexer",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "Parser",
+					"jsonFile" : "directory-Parser-Debug-f643defecf7e67e8cb79.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.25"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Parser"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						3
+					],
+					"name" : "Interpreter",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "Lexer",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "Interpreter::@8cf851e1b880e8e8583b",
+					"jsonFile" : "target-Interpreter-Debug-6db15154c81661d54495.json",
+					"name" : "Interpreter",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "Lexer::@f2e75dc994316ee0f988",
+					"jsonFile" : "target-Lexer-Debug-eaf51d411e23034cb7b5.json",
+					"name" : "Lexer",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug",
+		"source" : "C:/Users/dimas/OneDrive/Desktop/Interpreter"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}

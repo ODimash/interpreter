@@ -1,0 +1,10 @@
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/CMakeFiles/edit_cache.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Interpreter/CMakeFiles/Interpreter.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Interpreter/CMakeFiles/edit_cache.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Interpreter/CMakeFiles/rebuild_cache.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Lexer/CMakeFiles/Lexer.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Lexer/CMakeFiles/edit_cache.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Lexer/CMakeFiles/rebuild_cache.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Parser/CMakeFiles/edit_cache.dir
+C:/Users/dimas/OneDrive/Desktop/Interpreter/build/x64-debug/Parser/CMakeFiles/rebuild_cache.dir

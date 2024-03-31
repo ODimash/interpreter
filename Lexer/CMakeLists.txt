@@ -1,19 +1,17 @@
+# Добавляем библиотеку Lexer
+set(PROJECT_NAME Lexer)
 
-include_directories(include)
-add_executable(Lexer "Lexer.cpp" "include/Lexer.h" "include/TokenTypes.h"  )
+project(${PROJECT_NAME})
 
-add_library(LexerLib STATIC
-	Lexer.cpp
+add_library(${PROJECT_NAME}
+    Lexer.cpp
+    # Добавьте сюда все другие cpp-файлы вашей библиотеки, если они есть
 )
 
-set_target_properties(Lexer PROPERTIES 
-	OUTPUT_NAME "Lexer"
+# Установите путь к заголовочным файлам для библиотеки
+target_include_directories(${PROJECT_NAME} PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# Указываем версию и местоположение для установки
-install(TARGETS Lexer
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
-)
+# Это необходимо, если у вас есть cpp файлы, которые используют std::string или другие стандартные типы
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)

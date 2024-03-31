@@ -1,4 +1,4 @@
-#include "Lexer.h"
+#include <Lexer.h>
 
 Lexer::Lexer(std::string& sourceCode) : sourceCode(sourceCode) {
 	currentPosition = 0;
@@ -22,7 +22,12 @@ char Lexer::peek(int relativePosition) {
 
 char Lexer::advance() {
 	currentPosition++;
-	return peek(-1);
+	return peek(0);
+}
+
+char Lexer::advance(int moveAmount) {
+	currentPosition += moveAmount;
+	return peek(0);
 }
 
 bool Lexer::isAtEnd() {
@@ -35,56 +40,73 @@ bool Lexer::isHexNumber(char c) {
 }
 
 Token Lexer::scanToken() {
-	char c = advance();
+	char c = peek(0);
 	while (isspace(c)) {
-		printf("::::::::::::This is space: %c\n", c);
 		c = advance();
 	}
 
 	switch (c) {
-	case '+': return { TokenType::PLUS, "" };
-	case '-': return { TokenType::MINUS, "" };
-	case '*': return { TokenType::MULTIPLY, "" };
-	case '/': return { TokenType::DIVIDE, "" };
-	case '%': return { TokenType::REMAINDER, "" };
-	case '(': return { TokenType::LEFT_PAREN, "" };
-	case ')': return { TokenType::RIGHT_PAREN, "" };
-	case '{': return { TokenType::LEFT_BRACE, "" };
-	case '}': return { TokenType::RIGHT_BRACE, "" };
-	case ';': return { TokenType::SEMICOLON, "" };
-
+	case '+': advance(); return { TokenType::PLUS, "" };
+	case '-': advance(); return { TokenType::MINUS, "" };
+	case '*': advance(); return { TokenType::MULTIPLY, "" };
+	case '/': advance(); return { TokenType::DIVIDE, "" };
+	case '%': advance(); return { TokenType::REMAINDER, "" };
+	case '(': advance(); return { TokenType::LEFT_PAREN, "" };
+	case ')': advance(); return { TokenType::RIGHT_PAREN, "" };
+	case '{': advance(); return { TokenType::LEFT_BRACE, "" };
+	case '}': advance(); return { TokenType::RIGHT_BRACE, "" };
+	case ';': advance(); return { TokenType::SEMICOLON, "" };
 	case '=':
-		if (peek(0) == '=') return { TokenType::EQUAL, "" };
-		else return { TokenType::ASSIGN, "" };
+		if (peek(1) == '=') {
+			advance(2); 
+			return { TokenType::EQUAL, "" };
+		} else {
+			advance();
+			return { TokenType::ASSIGN, "" };
+		}
+
 	case '<':
-		if (peek(0) == '=') return { TokenType::LESS_THAN_OR_EQUAL, "" };
-		else return { TokenType::LESS_THAN, "" };
+		if (peek(1) == '=') {
+			advance(2);
+			return { TokenType::LESS_THAN_OR_EQUAL, "" };
+		} else {
+			advance();
+			return { TokenType::LESS_THAN, "" };
+		}
 	case '>':
-		if (peek(0) == '=') return { TokenType::GREATER_THAN_OR_EQUAL, "" };
-		else return { TokenType::GREATER_THAN, "" };
+		if (peek(1) == '=') {
+			advance(2);
+			return { TokenType::GREATER_THAN_OR_EQUAL, "" };
+		} else {
+			advance();
+			return { TokenType::GREATER_THAN, "" };
+		}
 
 	default:
 		if (isalpha(c)) return scanWord();
 		if (isdigit(c)) return scanNumber();
 		break;
 	}
-	return { TokenType::INVALIDE_TYPE, ""};
+
+	advance();
+	return { TokenType::INVALIDE_TYPE, "" };
 }
 
 Token Lexer::scanWord() {
 	std::string word;
-	word += peek(-1);
-	while (isalnum(peek(0))) {
-		word += advance();
+	char currentChar = peek(0);
+	while (isalnum(currentChar)) {
+		word += currentChar;
+		currentChar = advance();
 	}
 	return tokenizeWord(word);
 }
 
 Token Lexer::scanNumber() {
-	char currentChar = peek(-1);
-	if (currentChar == '0' && peek(0) == 'x')
+	char currentChar = peek(0);
+	if (currentChar == '0' && peek(1) == 'x')
 		return tokenizeHexNumber();
-	else if (currentChar == '0' && peek(0) == 'b')
+	else if (currentChar == '0' && peek(1) == 'b')
 		return tokenizeBinaryNumber();
 	else
 		return tokenizeDecNumber();
@@ -108,7 +130,7 @@ Token Lexer::tokenizeWord(std::string& word) {
 
 Token Lexer::tokenizeDecNumber() {
 	std::string number;
-	char currentChar = peek(-1);
+	char currentChar = peek(0);
 	bool isHaveDot = false;
 
 	while (isdigit(currentChar) || currentChar == '.') {
@@ -126,7 +148,7 @@ Token Lexer::tokenizeDecNumber() {
 
 Token Lexer::tokenizeHexNumber() {
 	std::string number;
-	advance(); // убираем курсор с "х"
+	while (advance() != 'x'); // убираем курсор с "х"
 	char currentChar = advance();
 
 	while (isdigit(currentChar) || isHexNumber(currentChar)) {
@@ -138,7 +160,7 @@ Token Lexer::tokenizeHexNumber() {
 
 Token Lexer::tokenizeBinaryNumber() {
 	std::string number;
-	advance(); // убираем курсор с "b"
+	while (advance() != 'b'); // убираем курсор с "b"
 	char currentChar = advance();
 
 	while (isdigit(currentChar) || isHexNumber(currentChar)) {

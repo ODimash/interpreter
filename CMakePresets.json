@@ -3,10 +3,10 @@
     "configurePresets": [
         {
             "name": "windows-base",
-            "hidden": true,
+            "hidden": false,
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "cl.exe",
                 "CMAKE_CXX_COMPILER": "cl.exe"
@@ -61,8 +61,8 @@
             "name": "linux-debug",
             "displayName": "Linux Debug",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             },
@@ -81,8 +81,8 @@
             "name": "macos-debug",
             "displayName": "macOS Debug",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             },

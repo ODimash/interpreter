@@ -1,4 +1,0 @@
-C:/Users/dimas/OneDrive/Desktop/Interpreter/out/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/dimas/OneDrive/Desktop/Interpreter/out/build/CMakeFiles/ZERO_CHECK.dir
-C:/Users/dimas/OneDrive/Desktop/Interpreter/out/build/Interpreter/CMakeFiles/Interpreter.dir
-C:/Users/dimas/OneDrive/Desktop/Interpreter/out/build/Lexer/CMakeFiles/Lexer.dir

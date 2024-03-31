@@ -20,6 +20,7 @@ private:
 
 	char peek(int relativePosition);
 	char advance();
+	char advance(int moveAmount);
 
 	Token scanToken();
 	Token scanWord();

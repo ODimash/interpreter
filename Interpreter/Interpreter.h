@@ -6,6 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "Lexer.h"
+#include <Lexer.h>
 
 // TODO: установите здесь ссылки на дополнительные заголовки, требующиеся для программы.
