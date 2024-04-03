@@ -2,8 +2,10 @@
 *.out
 *.o
 *.lib
+*.cmake
 
 .vs/
 .vscode/
 out/
 build/
+conan/

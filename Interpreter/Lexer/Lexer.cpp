@@ -1,5 +1,6 @@
 #include <Lexer.h>
 
+
 Lexer::Lexer(std::string& sourceCode) : sourceCode(sourceCode) {
 	currentPosition = 0;
 };
