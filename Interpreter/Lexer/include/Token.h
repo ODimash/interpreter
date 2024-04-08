@@ -1,14 +1,14 @@
 #pragma once
 #include <string>
-#include <TokenType.h>
+#include "TokenType.h"
 
 class Token {
 public:
-	Token(TokenType type, std::string value);
+	Token(TokenType type, std::wstring value);
 	TokenType getType() const;
-	std::string getValue() const;
+	std::wstring getValue() const;
 
 private:
 	TokenType type;
-	std::string value;
+	std::wstring value;
 };

@@ -10,17 +10,17 @@ using TokenVector = std::vector<Token>;
 
 class Lexer {
 public:
-	Lexer(std::ifstream& sourceFile);
+	Lexer(std::wifstream& sourceFile);
 	TokenVector tokenize();
 
 private:
 	TokenVector tokens;
-	std::ifstream& sourceFile;
-	std::istringstream currentLine;
-	char currentChar;
+	std::wifstream& sourceFile;
+	std::wistringstream currentLine;
+	wchar_t currentChar;
 	int currentLineIndex;
 
-	void setNewLine(std::string& newLine);
+	void setNewLine(std::wstring& newLine);
 	void tokenizeLine();
 	void tokenizeNumber();
 	void tokenizeDecNumber();
@@ -28,9 +28,9 @@ private:
 	void tokenizeBinNumber();
 	void tokenizeOperator();
 	void tokenizeString();
-	void handleEscapeChar(std::string& buffer);
+	void handleEscapeChar(std::wstring& buffer);
 	void tokenizeWord();
-	Token lookUpWordToken(std::string& word);
+	Token lookUpWordToken(std::wstring& word);
 
-	std::string getCurrentPosition();
+	std::wstring getCurrentPosition();
 };

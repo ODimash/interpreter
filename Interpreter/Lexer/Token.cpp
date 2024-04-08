@@ -1,12 +1,12 @@
 #include <Token.h>
 
-Token::Token(TokenType type, std::string value) : type(type), value(value) {
+Token::Token(TokenType type, std::wstring value) : type(type), value(value) {
 }
 
 TokenType Token::getType() const {
 	return type;
 }
 
-std::string Token::getValue() const {
+std::wstring Token::getValue() const {
 	return value;
 }

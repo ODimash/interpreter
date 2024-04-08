@@ -1,6 +1,6 @@
 # Определение функции
-func Greet() {
-    msgBox("Hello, world!")
+fnc Greet() {
+    write("Hello, world!")
 }
 
 # Вызов функции
@@ -8,23 +8,18 @@ Greet()
 
 # Цикл для вывода чисел от 1 до 5
 loop(5) {
-    msgBox(i)
+    write(i)
 }
 
 # Условная конструкция
 if (i > 3) {
-    msgBox("i is greater than 3")
+    write("i is greater than 3")
 } else if (i = 3) {
-    msgBox("i is less than or equal to 3")
+    write("i is less than or equal to 3")
 }
 
 # Присваивание переменной
 var x := 10
-
-inputBox(x, "Загаловок", "Подсказка")
-
-# Вывод значения переменной
-msgBox(x, "Загаловок")
 
 # Неправильные коды
 var 1var := 1
