@@ -1,214 +1,178 @@
 #include <Lexer.h>
+#include <iostream>
+Lexer::Lexer(std::ifstream& sourceFile) : sourceFile(sourceFile), currentLineIndex(0) {
+}
 
-
-Lexer::Lexer(std::string& sourceCode) : sourceCode(sourceCode) {
-	currentPosition = 0;
-};
-
-std::vector<Token> Lexer::tokenize() {
-	std::vector<Token> tokens;
-	while (!isAtEnd()) {
-		tokens.push_back(scanToken());
+TokenVector Lexer::tokenize() {
+	std::string lineOfCode;
+	while (std::getline(sourceFile, lineOfCode)) {
+		currentLineIndex++;
+		setNewLine(lineOfCode);
+		if (currentLine.peek() == EOF) continue;
+		tokenizeLine();
+		tokens.push_back({ TokenType::EndLine, "" });
 	}
+
 	return tokens;
 }
 
-char Lexer::peek(int relativePosition) {
-	int targetPosition = currentPosition + relativePosition;
-	if (targetPosition >= sourceCode.size())
-		return 0;
-
-	return sourceCode[targetPosition];
+void Lexer::setNewLine(std::string& newLine) {
+	currentLine.str(newLine);
+	currentLine.clear(); // Сброс флагов ошибок и EOF
+	currentLine.seekg(0); // Перемещение позиции чтения в начало строки
 }
 
-char Lexer::advance() {
-	currentPosition++;
-	return peek(0);
-}
-
-char Lexer::advance(int moveAmount) {
-	currentPosition += moveAmount;
-	return peek(0);
-}
-
-bool Lexer::isAtEnd() {
-	return currentPosition >= sourceCode.size();
-}
-
-bool Lexer::isHexNumber(char c) {
-	std::string hexNumbers = "abcdefABCDEF";
-	return hexNumbers.find(c) != std::string::npos;
-}
-
-Token Lexer::scanToken() {
-	char c = peek(0);
-	while (isspace(c)) {
-		c = advance();
+void Lexer::tokenizeLine() {
+	while (currentLine >> currentChar) {
+		if (isdigit(currentChar)) tokenizeNumber();
+		else if (iscsym(currentChar)) tokenizeWord();
+		else if (currentChar == '#') return;
+		else tokenizeOperator();
 	}
+}
 
-	switch (c) {
-	case '+': advance(); return { TokenType::PLUS, "" };
-	case '-': advance(); return { TokenType::MINUS, "" };
-	case '*': advance(); return { TokenType::MULTIPLY, "" };
-	case '/': advance(); return { TokenType::DIVIDE, "" };
-	case '%': advance(); return { TokenType::REMAINDER, "" };
-	case '(': advance(); return { TokenType::LEFT_PAREN, "" };
-	case ')': advance(); return { TokenType::RIGHT_PAREN, "" };
-	case '{': advance(); return { TokenType::LEFT_BRACE, "" };
-	case '}': advance(); return { TokenType::RIGHT_BRACE, "" };
-	case ';': advance(); return { TokenType::SEMICOLON, "" };
-	case '=': advance(); return { TokenType::EQUAL, "" };
-	case ',': advance(); return { TokenType::COMMA, "" };
-	case '#': advance(); return tokenizeComment();
-	case '\"': advance(); return tokenizeString();
-	case ':': 
-		if (peek(1) == '=') {
-			advance(2);
-			return {TokenType::ASSIGN, ""};
+void Lexer::tokenizeNumber() {
+	if (currentChar == '0') {
+		currentChar = currentLine.get();
+		switch (currentChar) {
+		case('x'): return tokenizeHexNumber();
+		case('b'): return tokenizeBinNumber();
 		}
-		break;
-	case '<':
-		if (peek(1) == '=') {
-			advance(2);
-			return { TokenType::LESS_THAN_OR_EQUAL, "" };
-		} else {
-			advance();
-			return { TokenType::LESS_THAN, "" };
-		}
-	case '>':
-		if (peek(1) == '=') {
-			advance(2);
-			return { TokenType::GREATER_THAN_OR_EQUAL, "" };
-		} else {
-			advance();
-			return { TokenType::GREATER_THAN, "" };
-		}
-
-	default:
-		if (isalpha(c)) return scanWord();
-		if (isdigit(c)) return scanNumber();
-		break;
 	}
-
-	std::string invalide_type_info = "\"" + std::string(1, c) + "\": [" + std::to_string(currentPosition) + ']';
-	advance();
-	return { TokenType::INVALIDE_TYPE, invalide_type_info};
+	tokenizeDecNumber();
 }
 
-Token Lexer::scanWord() {
-	std::string word;
-	char currentChar = peek(0);
-	while (isalnum(currentChar)) {
-		word += currentChar;
-		currentChar = advance();
-	}
-	return tokenizeWord(word);
-}
-
-Token Lexer::scanNumber() {
-	char currentChar = peek(0);
-	if (currentChar == '0' && peek(1) == 'x')
-		return tokenizeHexNumber();
-	else if (currentChar == '0' && peek(1) == 'b')
-		return tokenizeBinaryNumber();
-	else
-		return tokenizeDecNumber();
-
-}
-
-Token Lexer::tokenizeWord(std::string& word) {
-	if (word == "if")      return { TokenType::IF, "" };
-	if (word == "else")    return { TokenType::ELSE, "" };
-	if (word == "loop")    return { TokenType::LOOP, "" };
-	if (word == "while")   return { TokenType::WHILE, "" };
-	if (word == "for")     return { TokenType::FOR, "" };
-	if (word == "return")  return { TokenType::RETURN, "" };
-	if (word == "true")    return { TokenType::TRUE, "" };
-	if (word == "false")   return { TokenType::FALSE, "" };
-	if (word == "and")     return { TokenType::AND, "" };
-	if (word == "or")      return { TokenType::OR, "" };
-	if (word == "not")     return { TokenType::NOT, ""};
-	if (word == "none")    return { TokenType::NONE, "" };
-	if (word == "var")     return { TokenType::VAR, "" };
-	if (word == "func")    return { TokenType::FUNC, "" };
-	if (word == "msgBox")  return { TokenType::MSGBOX, "" };
-	if (word == "inputBox") return { TokenType::MSGBOX, "" };
-	else                    return tokenizeIdentifier(word);
-
-
-}
-
-Token Lexer::tokenizeDecNumber() {
-	std::string number;
-	char currentChar = peek(0);
+void Lexer::tokenizeDecNumber() {
+	std::string buffer;
 	bool isHaveDot = false;
-
 	while (isdigit(currentChar) || currentChar == '.') {
+		buffer += currentChar;
+		currentChar = currentLine.get();
 		if (currentChar == '.') {
 			if (!isHaveDot) isHaveDot = true;
-			else break;
+			else return;
 		}
-		number += currentChar;
-		currentChar = advance();
 	}
-
-	if (isHaveDot) return { TokenType::FLOAT, number };
-	else return { TokenType::INT, number };
+	if (isalpha(currentChar)) tokens.push_back({ TokenType::Invalid, getCurrentPosition() }); // Надо написать новый обработчик ошибок для слитых токенов
+	else tokens.push_back({ TokenType::ValueNumber, buffer });
+	currentLine.unget();
 }
 
-Token Lexer::tokenizeHexNumber() {
-	std::string number;
-	while (advance() != 'x'); // убираем курсор с "х"
-	char currentChar = advance();
-
-	while (isdigit(currentChar) || isHexNumber(currentChar)) {
-		number += currentChar;
-		currentChar = advance();
+void Lexer::tokenizeHexNumber() {
+	std::string buffer;
+	currentChar = currentLine.get(); // Пропускаем символ "х"
+	while (isxdigit(currentChar)) {
+		buffer += currentChar;
+		currentChar = currentLine.get();
 	}
-	return { TokenType::HEX, number };
+	if (isalpha(currentChar)) tokens.push_back({ TokenType::Invalid, getCurrentPosition() });
+	else tokens.push_back({ TokenType::ValueHexNumber, buffer });
+	currentLine.unget();
 }
 
-Token Lexer::tokenizeBinaryNumber() {
-	std::string number;
-	while (advance() != 'b'); // убираем курсор с "b"
-	char currentChar = advance();
-
-	while (isdigit(currentChar) || isHexNumber(currentChar)) {
-		number += currentChar;
-		currentChar = advance();
+void Lexer::tokenizeBinNumber() {
+	std::string buffer;
+	currentChar = currentLine.get(); // Пропускаем символ "b"
+	while (currentChar == '0' or currentChar == '1') {
+		buffer += currentChar;
+		currentChar = currentLine.get();
 	}
-	return { TokenType::BINARY, number };
+	if (isalpha(currentChar) or isdigit(currentChar)) tokens.push_back({ TokenType::Invalid, getCurrentPosition() });
+	else tokens.push_back({ TokenType::ValueHexNumber, buffer });
+	currentLine.unget();
 }
 
-
-Token Lexer::tokenizeComment() {
-	std::string comment;
-	char currentChar = peek(0);
-	while (currentChar != '\n') {
-		comment += currentChar;
-		currentChar = advance();
-	}
-	return { TokenType::COMMENT, comment };
+std::string Lexer::getCurrentPosition() {
+	return currentLineIndex + ":" + currentLine.tellg();
 }
 
-Token Lexer::tokenizeIdentifier(std::string& word) {
-	char currentChar = peek(0);
-	while (isspace(currentChar)) {
-		currentChar = advance();
+void Lexer::tokenizeOperator() {
+	switch (currentChar) {
+	case '+': return tokens.push_back({ TokenType::Addition, "" });
+	case '-': return tokens.push_back({ TokenType::Subtraction, "" });
+	case '*': return tokens.push_back({ TokenType::Multiplication, "" });
+	case '/': return tokens.push_back({ TokenType::Division, "" });
+	case '%': return tokens.push_back({ TokenType::Modulus, "" });
+	case '(': return tokens.push_back({ TokenType::OpenParen, "" });
+	case ')': return tokens.push_back({ TokenType::CloseParen, "" });
+	case '{': return tokens.push_back({ TokenType::OpenBrace, "" });
+	case '}': return tokens.push_back({ TokenType::CloseBrace, "" });
+	case '[': return tokens.push_back({ TokenType::OpenBracket, "" });
+	case ']': return tokens.push_back({ TokenType::CloseBracket, "" });
+	case '@': return tokens.push_back({ TokenType::Insert, "" });
+	case '=': return tokens.push_back({ TokenType::Equal, "" });
+	case ',': return tokens.push_back({ TokenType::Comma, "" });
+	case '"': return tokenizeString();
+	case '<':
+		if (currentLine.get() == '=') return tokens.push_back({ TokenType::LessThanOrEqual, "" });
+		currentLine.unget();
+		return tokens.push_back({ TokenType::LessThan, "" });
+	case '>':
+		if (currentLine.get() == '=') return tokens.push_back({ TokenType::GreaterThanOrEqual, "" });
+		currentLine.unget();
+		return tokens.push_back({ TokenType::GreaterThan, "" });
+	case ':':
+		if (currentLine.get() == '=') return tokens.push_back({ TokenType::Assign, "" });
+		currentLine.unget();
+		return tokens.push_back({ TokenType::Colon, "" });
+
+	default:
+		tokens.push_back({ TokenType::Invalid, getCurrentPosition() });
+	}
+}
+
+void Lexer::tokenizeString() {
+	std::string buffer;
+	currentChar = currentLine.get(); // пропускаем открывающий '"'
+	while (currentChar != '"' and currentChar != EOF) {
+		if (currentChar == '\\') {
+			handleEscapeChar(buffer);
+			continue;
+		}
+		buffer += currentChar;
+		currentChar = currentLine.get();
+	}
+	currentLine.ignore(1); // пропускаем закрывающий знак '"'
+}
+
+void Lexer::handleEscapeChar(std::string& buffer) {
+	const std::string escapeChars = "\"\'\n\t\r\b\a";
+	currentChar = currentLine.get();
+	char result = escapeChars.find(currentChar);
+	if (result != std::string::npos) {
+		buffer += escapeChars[result];
+	} else buffer += currentChar;
+}
+
+void Lexer::tokenizeWord() {
+	std::string buffer;
+	while (iscsym(currentChar)) {
+		buffer += currentChar;
+		currentChar = currentLine.get();
+	}
+	tokens.push_back(lookUpWordToken(buffer));
+	currentLine.unget();
+}
+
+Token Lexer::lookUpWordToken(std::string& word) {
+	const std::unordered_map<std::string, Token> keywords = {
+		{"if", {TokenType::KeywordIf, ""}},
+		{"elif", {TokenType::KeywordElif, ""}},
+		{"else", {TokenType::KeywordElse, ""}},
+		{"while", {TokenType::KeywordWhile, ""}},
+		{"loop", {TokenType::KeywordLoop, ""}},
+		{"stop", {TokenType::KeywordStop, ""}},
+		{"skip", {TokenType::KeywordSkip, ""}},
+		{"fnc", {TokenType::KeywordFnc, ""}},
+		{"return", {TokenType::KeywordReturn, ""}},
+		{"switch", {TokenType::KeywordSwitch, ""}},
+		{"default", {TokenType::KeywordDefault, ""}},
 	};
-	if (peek(0) == '(') {
-		return { TokenType::IDENTIFIER_FUNC, word };
-	} 
-	return { TokenType::IDENTIFIER_VAR, word };
-}
+	auto result = keywords.find(word);
 
-Token Lexer::tokenizeString() {
-	std::string str;
-	char currentChar = peek(0);
-	while (currentChar != '\"') {
-		str += currentChar;
-		currentChar = advance();
+	if (result != keywords.end()) {
+		return result->second;
+	} else {
+		return Token(TokenType::Identifier, word);
 	}
-	advance();
-	return { TokenType::STRING, str };
 }

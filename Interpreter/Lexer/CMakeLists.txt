@@ -1,7 +1,7 @@
 set(PROJECT_NAME Lexer)
 project(${PROJECT_NAME})
 
-add_library(${PROJECT_NAME} Lexer.cpp)
+add_library(${PROJECT_NAME} Lexer.cpp Token.cpp   )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

@@ -1,40 +1,36 @@
 #pragma once
 
-#include <string>
+#include <fstream>
 #include <vector>
-#include "TokenTypes.h"
+#include <unordered_map>
+#include <sstream>
+#include "Token.h"
 
-struct Token {
-	TokenType type;
-	std::string text;
-};
+using TokenVector = std::vector<Token>;
 
 class Lexer {
 public:
-	Lexer(std::string& sourceCode);
-	std::vector<Token> tokenize();
+	Lexer(std::ifstream& sourceFile);
+	TokenVector tokenize();
 
 private:
-	std::string sourceCode;
-	std::size_t currentPosition;
+	TokenVector tokens;
+	std::ifstream& sourceFile;
+	std::istringstream currentLine;
+	char currentChar;
+	int currentLineIndex;
 
-	char peek(int relativePosition);
-	char advance();
-	char advance(int moveAmount);
+	void setNewLine(std::string& newLine);
+	void tokenizeLine();
+	void tokenizeNumber();
+	void tokenizeDecNumber();
+	void tokenizeHexNumber();
+	void tokenizeBinNumber();
+	void tokenizeOperator();
+	void tokenizeString();
+	void handleEscapeChar(std::string& buffer);
+	void tokenizeWord();
+	Token lookUpWordToken(std::string& word);
 
-	Token scanToken();
-	Token scanWord();
-	Token scanNumber();
-
-	Token tokenizeWord(std::string& word);
-	Token tokenizeDecNumber();
-	Token tokenizeHexNumber();
-	Token tokenizeBinaryNumber();
-	Token tokenizeComment();
-	Token tokenizeIdentifier(std::string& word);
-	Token tokenizeString();
-
-	bool isAtEnd();
-	bool isHexNumber(char c);
-
+	std::string getCurrentPosition();
 };

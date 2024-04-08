@@ -25,7 +25,7 @@
 		| <for_loop> 
 		| <function_definition> 
 		| <return_statement> 
-		| <expression>`
+		| <expression>
 ```
 *<statement\>*: Оператор программы. Это может быть присваивание, условный оператор (if), цикл (while или for), определение функции (fnc), оператор return или выражение.
 
@@ -61,7 +61,7 @@
 
 ### *Выражении*
 ```
-<expression>     ::= <logical_or>
+<expression>     ::= <logical_or> | <call_function> | <system_functions>
 <logical_or>     ::= <logical_and> 'or' <logical_or> | <logical_and>
 <logical_and>    ::= <equality> 'and' <logical_and> | <equality>
 <equality>       ::= <relational> ('=' | '!=') <equality> | <relational>
@@ -70,6 +70,7 @@
 <multiplicative> ::= <unary>     ('*' | '/') <multiplicative> | <unary>
 <unary>          ::= <additive_operators> ('+' | '-') | <primary>
 <primary>        ::= <identifier> | <number> | '(' <expression> ')'
+<call_function> ::= <identifier> '(' <parameters> ')'
 ```
 
 ### *Типы данных*
