@@ -1,3 +1,3 @@
-﻿text_1 := "this is a test string"
-text_2 := "Это тестовая строка? "
-text_3 := "Для вставки двойных ковычек, поставьте \\ перед 'n', \n А для переноса строки \\n"
+text_1 := "this is a test string"
+text_2 := "this is string?"
+text_3 := "for writing on a new line past '\\' from 'n', \n This is a character for new line - \\n"

@@ -1,5 +1,6 @@
 #include <Lexer.h>
 #include <iostream>
+
 Lexer::Lexer(std::wifstream& sourceFile) : sourceFile(sourceFile), currentLineIndex(0) {
 }
 
@@ -127,9 +128,9 @@ void Lexer::tokenizeString() {
 	while (currentChar != L'"' and currentChar != EOF) {
 		if (currentChar == L'\\') {
 			handleEscapeChar(buffer);
-			continue;
+		} else {
+			buffer += currentChar;
 		}
-		buffer += currentChar;
 		currentChar = currentLine.get();
 	}
 	tokens.push_back({TokenType::ValueString, buffer });
@@ -137,12 +138,16 @@ void Lexer::tokenizeString() {
 }
 
 void Lexer::handleEscapeChar(std::wstring& buffer) {
-	const std::wstring escapeChars = L"\"\'\n\t\r\b\a";
+	const std::wstring escapeChars = {L'n', L'a', L'b', L'r', L't'};
 	currentChar = currentLine.get();
-	size_t result = escapeChars.find(currentChar);
-	if (result != std::wstring::npos) {
-		buffer += escapeChars[result];
-	} else buffer += currentChar;
+		switch (currentChar) {
+		case 'n': buffer += '\n'; break;
+		case 'a': buffer += '\a'; break;
+		case 'b': buffer += '\b'; break;
+		case 'r': buffer += '\r'; break;
+		case 't': buffer += '\n'; break;
+		default: buffer += currentChar;
+		}
 }
 
 void Lexer::tokenizeWord() {
